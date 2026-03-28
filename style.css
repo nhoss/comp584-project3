@@ -1,0 +1,144 @@
+/*
+  CSS Grid version of the original flexbox layout.
+  Mobile first: every row starts as a single-column grid.
+*/
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f7f7f7;
+  color: #1f2933;
+}
+
+.wrapper {
+  width: min(1200px, 92%);
+  margin: 0 auto;
+  padding: 1rem 0 2rem;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
+
+  /* New property: grid-auto-flow controls how auto-placed items fill the grid. */
+  grid-auto-flow: row;
+}
+
+[class*="col-"] {
+  padding: 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+
+  /* New property: justify-self lets one grid item control its inline alignment. */
+  justify-self: stretch;
+}
+
+img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.5rem;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+p:last-child {
+  margin-bottom: 0;
+}
+
+/* Existing colors */
+.col-1 { background-color: #A3CDD9; }
+.col-2 { background-color: #FFFCE6; }
+.col-3 { background-color: #F2D44B; }
+.col-4 { background-color: #C8C1B8; }
+.col-6 { background-color: #EAF2F5; }
+
+/* Row 6 unique */
+.row-6 .col-6 {
+  text-align: center;
+
+  /* New property: align-self changes one grid item's alignment in the block direction. */
+  align-self: stretch;
+}
+
+.row-6 .col-6 p {
+  margin-bottom: 0;
+}
+
+/* Tablet */
+@media only screen and (min-width: 480px) {
+  .row {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    /*
+      New value/function: minmax(0, 1fr) prevents columns from overflowing
+      while still sharing available space evenly.
+    */
+  }
+
+  .col-2,
+  .col-4,
+  .row5-b,
+  .col-3-left,
+  .col-3 {
+    grid-column: 1 / -1;
+  }
+
+  /* Row 5 reorder to match the flexbox version on tablet */
+  .row5-b { order: -1; }
+  .row5-a { order: 2; }
+  .row5-c { order: 3; }
+
+  /* Row 6: 3 items per row */
+  .row-6 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* Desktop */
+@media only screen and (min-width: 768px) {
+  .row {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: stretch;
+  }
+
+  .col-1 { grid-column: span 1; }
+  .col-2 { grid-column: span 2; }
+  .col-3 { grid-column: span 3; }
+  .col-4 { grid-column: 1 / -1; }
+
+  /* Reset special tablet stacking for row 3 */
+  .col-3-left {
+    grid-column: span 1;
+  }
+
+  /* Reset Row 5 ordering on desktop */
+  .row5-a,
+  .row5-b,
+  .row5-c {
+    order: 0;
+  }
+
+  .row5-b {
+    grid-column: span 2;
+  }
+
+  /* Row 6: more than 4 items across */
+  .row-6 {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+
+    /*
+      New property: place-items is shorthand for align-items + justify-items.
+      It centers the content inside each grid cell.
+    */
+    place-items: stretch center;
+  }
+}
